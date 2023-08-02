@@ -1679,6 +1679,7 @@ extern struct mg_tcpip_driver mg_tcpip_driver_w5500;
 extern struct mg_tcpip_driver mg_tcpip_driver_tm4c;
 extern struct mg_tcpip_driver mg_tcpip_driver_stm32h;
 extern struct mg_tcpip_driver mg_tcpip_driver_imxrt;
+extern struct mg_tcpip_driver mg_tcpip_driver_same54;
 
 // Drivers that require SPI, can use this SPI abstraction
 struct mg_tcpip_spi {
@@ -1688,7 +1689,7 @@ struct mg_tcpip_spi {
   uint8_t (*txn)(void *, uint8_t);  // SPI transaction: write 1 byte, read reply
 };
 
-#if !defined(MG_ENABLE_DRIVER_STM32H) && !defined(MG_ENABLE_DRIVER_TM4C)
+#if !defined(MG_ENABLE_DRIVER_STM32H) && !defined(MG_ENABLE_DRIVER_TM4C) && !defined(MG_ENABLE_DRIVER_SAME54)
 #define MG_ENABLE_DRIVER_STM32 1
 #else
 #define MG_ENABLE_DRIVER_STM32 0
@@ -1708,6 +1709,11 @@ struct mg_tcpip_driver_imxrt1020_data {
   //    50 MHz        0x09           3
   //    66 MHz        0x0D           4  <-- value for iMXRT1020-EVK at max freq.
   int mdc_cr;  // Valid values: -1, 0, 1, 2, 3, 4
+};
+
+
+struct mg_tcpip_driver_same54_data {
+    int mdc_cr;
 };
 
 
