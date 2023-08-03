@@ -37,10 +37,6 @@ static void timer_fn(void *arg) {
            ifp->ndrop, ifp->nerr));
 }
 
-static void fn(struct mg_connection *c, int ev, void *ev_data, void *fn_data) {
-  if (ev == MG_EV_HTTP_MSG) mg_http_reply(c, 200, "", "ok\n");
-  }
-
 int main(void) {
   gpio_input(BUTTON_PIN);
   gpio_output(LED_PIN);
@@ -55,7 +51,7 @@ int main(void) {
 
   // Initialise Mongoose network stack
   struct mg_tcpip_driver_same54_data driver_data = {.mdc_cr = 5};
-  struct mg_tcpip_if mif = {.mac = {2, 3, 4, 5, 6, 7},
+  struct mg_tcpip_if mif = {.mac = GENERATE_LOCALLY_ADMINISTERED_MAC()/*{2, 3, 4, 5, 6, 7}*/,
                             // Uncomment below for static configuration:
                             // .ip = mg_htonl(MG_U32(192, 168, 0, 223)),
                             // .mask = mg_htonl(MG_U32(255, 255, 255, 0)),
@@ -71,8 +67,7 @@ int main(void) {
   }
 
   MG_INFO(("Initialising application..."));
-  mg_http_listen(&mgr, "http://0.0.0.0", fn, NULL);
-  //web_init(&mgr);
+  web_init(&mgr);
 
   MG_INFO(("Starting event loop"));
   for (;;) {
